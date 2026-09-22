@@ -1,0 +1,24 @@
+# Configuration for the House Price Prediction project
+# Values here are the single source of truth referenced by src/ modules'
+# defaults (currently read manually; wire up a YAML loader if this grows).
+
+data:
+  raw_path: "data/house_prices.csv"
+  target_column: "Price"
+  valid_locations: ["City Center", "Suburb", "Rural"]
+  valid_property_types: ["House", "Apartment", "Villa"]
+
+training:
+  random_state: 42
+  test_size: 0.2
+  cv_folds: 5
+  scoring: "neg_mean_absolute_error"
+
+model:
+  artifact_path: "models/house_price_model.pkl"
+  version: "1.0.0"
+
+app:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false

@@ -1,0 +1,119 @@
+{
+  "results_by_model": {
+    "linear_regression": {
+      "mae": 2285844.6427080124,
+      "rmse": 3020306.139891131,
+      "r2": 0.9359472671058938,
+      "mape": 13.87598492985955,
+      "cv_r2_mean": 0.9535291916199696,
+      "cv_r2_std": 0.007140261991125047,
+      "best_params": {},
+      "train_time_seconds": 0.07
+    },
+    "random_forest": {
+      "mae": 1389016.6666666667,
+      "rmse": 1890174.8840495332,
+      "r2": 0.9749135210563797,
+      "mape": 6.270568183424811,
+      "cv_r2_mean": 0.9707236070182879,
+      "cv_r2_std": 0.004755975047237572,
+      "best_params": {
+        "regressor__max_depth": null,
+        "regressor__min_samples_leaf": 1,
+        "regressor__n_estimators": 100
+      },
+      "train_time_seconds": 17.35
+    },
+    "gradient_boosting": {
+      "mae": 812104.6169268097,
+      "rmse": 1199574.0261261608,
+      "r2": 0.9898960813624921,
+      "mape": 3.9380385051330493,
+      "cv_r2_mean": 0.9889513239672688,
+      "cv_r2_std": 0.0029904581215209483,
+      "best_params": {
+        "regressor__learning_rate": 0.1,
+        "regressor__max_depth": 3,
+        "regressor__n_estimators": 200
+      },
+      "train_time_seconds": 6.72
+    }
+  },
+  "best_model": "gradient_boosting",
+  "feature_importance": [
+    {
+      "feature": "Area",
+      "importance_pct": 66.22
+    },
+    {
+      "feature": "Location_City Center",
+      "importance_pct": 17.78
+    },
+    {
+      "feature": "Location_Rural",
+      "importance_pct": 9.36
+    },
+    {
+      "feature": "Location_Suburb",
+      "importance_pct": 2.86
+    },
+    {
+      "feature": "Bedrooms",
+      "importance_pct": 1.43
+    },
+    {
+      "feature": "total_rooms",
+      "importance_pct": 1.24
+    },
+    {
+      "feature": "Age",
+      "importance_pct": 0.72
+    },
+    {
+      "feature": "bath_bed_ratio",
+      "importance_pct": 0.21
+    },
+    {
+      "feature": "area_per_room",
+      "importance_pct": 0.14
+    },
+    {
+      "feature": "Property_Type_House",
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "is_new",
+      "importance_pct": 0.01
+    },
+    {
+      "feature": "Property_Type_Apartment",
+      "importance_pct": 0.01
+    },
+    {
+      "feature": "Bathrooms",
+      "importance_pct": 0.0
+    },
+    {
+      "feature": "Property_Type_Villa",
+      "importance_pct": 0.0
+    },
+    {
+      "feature": "age_bucket_0-5",
+      "importance_pct": 0.0
+    },
+    {
+      "feature": "age_bucket_16-30",
+      "importance_pct": 0.0
+    },
+    {
+      "feature": "age_bucket_30+",
+      "importance_pct": 0.0
+    },
+    {
+      "feature": "age_bucket_6-15",
+      "importance_pct": 0.0
+    }
+  ],
+  "n_train": 240,
+  "n_test": 60
+}

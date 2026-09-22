@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Valuation Desk</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --ink: #16232E;
+    --blueprint: #1C3D5A;
+    --blueprint-line: rgba(28,61,90,0.18);
+    --paper: #F3EEE4;
+    --paper-raised: #FBF8F1;
+    --brass: #A9793E;
+    --good: #3E6B4F;
+    --bad: #A23E33;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+  }
+
+  .wrap{
+    max-width:1000px;
+    margin:0 auto;
+    padding:56px 24px 80px;
+  }
+
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:20px;
+    margin-bottom:44px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:2.3rem;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--blueprint);
+    text-align:right;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap:40px;
+  }
+
+  @media (max-width: 760px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .panel{
+    background:var(--paper-raised);
+    border:1.5px solid var(--ink);
+    padding:32px;
+  }
+
+  .panel h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.15rem;
+    margin:0 0 24px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--blueprint-line);
+  }
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;
+    font-size:0.82rem;
+    color:var(--blueprint);
+    margin-bottom:6px;
+    font-weight:500;
+  }
+  .field input, .field select{
+    width:100%;
+    padding:11px 12px;
+    border:1.3px solid var(--ink);
+    background:#fff;
+    font-family:'Inter', sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{
+    outline:2px solid var(--brass);
+    outline-offset:1px;
+  }
+
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+
+  button{
+    width:100%;
+    padding:14px;
+    background:var(--blueprint);
+    color:#fff;
+    border:none;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  button:hover{background:var(--ink);}
+
+  .result-empty{
+    color:#7a7368;
+    font-size:0.92rem;
+    line-height:1.6;
+  }
+
+  .estimate{
+    font-family:'Fraunces', serif;
+    font-size:2.4rem;
+    font-weight:500;
+    line-height:1.1;
+    margin:6px 0 4px;
+  }
+
+  .range{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.82rem;
+    color:var(--blueprint);
+    margin-bottom:22px;
+  }
+
+  .meta-line{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.82rem;
+    padding:8px 0;
+    border-top:1px solid var(--blueprint-line);
+  }
+  .meta-line span:first-child{color:#7a7368;}
+
+  .error-box{
+    background:#FBEBE8;
+    border:1.3px solid var(--bad);
+    color:var(--bad);
+    padding:14px 16px;
+    font-size:0.88rem;
+    margin-bottom:20px;
+  }
+
+  footer{
+    margin-top:48px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    color:#8a8478;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Property Valuation Desk</h1>
+    <div class="tag">Gradient Boosting model &middot; trained on 300 recorded sales</div>
+  </header>
+
+  <div class="grid">
+
+    <div class="panel">
+      <h2>Enter property details</h2>
+
+      {% if error %}
+      <div class="error-box">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="/predict">
+        <div class="field">
+          <label for="area">Area (sqft)</label>
+          <input type="number" step="any" id="area" name="area" placeholder="e.g. 1200" value="{{ form_data.get('area', '') }}" required>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="bedrooms">Bedrooms</label>
+            <input type="number" id="bedrooms" name="bedrooms" placeholder="3" value="{{ form_data.get('bedrooms', '') }}" required>
+          </div>
+          <div class="field">
+            <label for="bathrooms">Bathrooms</label>
+            <input type="number" id="bathrooms" name="bathrooms" placeholder="2" value="{{ form_data.get('bathrooms', '') }}" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="age">Property age (years)</label>
+          <input type="number" id="age" name="age" placeholder="5" value="{{ form_data.get('age', '') }}" required>
+        </div>
+
+        <div class="field">
+          <label for="location">Location</label>
+          <select id="location" name="location" required>
+            <option value="">Select a location</option>
+            {% for loc in ['City Center', 'Suburb', 'Rural'] %}
+            <option value="{{ loc }}" {% if form_data.get('location') == loc %}selected{% endif %}>{{ loc }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="property_type">Property type</label>
+          <select id="property_type" name="property_type" required>
+            <option value="">Select a type</option>
+            {% for pt in ['House', 'Apartment', 'Villa'] %}
+            <option value="{{ pt }}" {% if form_data.get('property_type') == pt %}selected{% endif %}>{{ pt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit">Estimate price</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Estimate</h2>
+
+      {% if result %}
+        <div class="estimate">₹{{ "{:,.0f}".format(result.prediction) }}</div>
+        <div class="range">₹{{ "{:,.0f}".format(result.confidence_interval_low) }} &ndash; ₹{{ "{:,.0f}".format(result.confidence_interval_high) }}</div>
+
+        <div class="meta-line"><span>Model</span><span>{{ result.model_used.replace('_', ' ') }}</span></div>
+        <div class="meta-line"><span>Version</span><span>{{ result.model_version }}</span></div>
+        <div class="meta-line"><span>Interval basis</span><span>&plusmn; mean absolute error</span></div>
+      {% else %}
+        <p class="result-empty">Fill in the property details and submit the form to see a price estimate here, along with a confidence range based on the model's typical error margin.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <footer>API available at /api/predict (POST, JSON) &middot; health check at /api/health</footer>
+
+</div>
+</body>
+</html>
